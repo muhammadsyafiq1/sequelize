@@ -70,28 +70,28 @@ const User = sequelize.define('users', {
 // })
 
 //bulk create
-User.sync({alter: true}).then(()=>{
-    return User.bulkCreate([
-        {
-            username: 'a',
-            age: '23',
-            password: 123
-        },
-        {
-            username: 'aaaaa',
-            age: '23',
-            password: 123
-        }
-    ], { 
-        validate: true
-    });
-}).then((data)=>{
-    data.forEach((element)=>{
-        console.log(element.toJSON());
-    });
-}).catch((err)=>{
-    console.log(err);
-})
+// User.sync({alter: true}).then(()=>{
+//     return User.bulkCreate([
+//         {
+//             username: 'a',
+//             age: '23',
+//             password: 123
+//         },
+//         {
+//             username: 'aaaaa',
+//             age: '23',
+//             password: 123
+//         }
+//     ], { 
+//         validate: true
+//     });
+// }).then((data)=>{
+//     data.forEach((element)=>{
+//         console.log(element.toJSON());
+//     });
+// }).catch((err)=>{
+//     console.log(err);
+// })
 
 //test validation
 // User.sync({alter: true}).then(()=>{
@@ -107,3 +107,14 @@ User.sync({alter: true}).then(()=>{
 // }).catch((err)=>{
 //     console.log(err);
 // })
+
+//all data
+User.sync({alter: true}).then(() => {
+    return User.findAll();
+}).then((data) => {
+    data.forEach((element) => {
+        console.log(element.toJSON());
+    })
+}).catch((err) => {
+    console.log(err);
+});
