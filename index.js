@@ -1,4 +1,5 @@
-const { Sequelize } = require("sequelize");
+const { Sequelize } = require("sequelize")
+const {DataTypes} = Sequelize
 
 const sequelize = new Sequelize('sequelize','root', '', {
     dialect: 'mysql'
@@ -16,18 +17,21 @@ const sequelize = new Sequelize('sequelize','root', '', {
 // #2 Models
 const User = sequelize.define('users', {
     username: {
-        type: Sequelize.DataTypes.STRING,
-        allowNull: false
+        type: DataTypes.STRING,
+        allowNull: false,
+        validate:{
+            len: [3, 16]
+        }
     },
     password: {
-        type: Sequelize.DataTypes.STRING
+        type: DataTypes.STRING
     },
     age: {
-        type: Sequelize.DataTypes.INTEGER,
+        type: DataTypes.INTEGER,
         defaultValue: 21
     },
     WittCodeRocks :{
-        type: Sequelize.DataTypes.BOOLEAN,
+        type: DataTypes.BOOLEAN,
         defaultValue: true
     }
 }, {
@@ -49,8 +53,57 @@ const User = sequelize.define('users', {
 // });
 
 // tambah atau hapus field table
-User.sync({alter: true}).then((data) => {
-    console.log('Success');
-}).catch((err) => {
-    console.log('error');
-});
+// User.sync({alter: true}).then((data) => {
+//     console.log('Success');
+// }).catch((err) => {
+//     console.log('error');
+// });
+
+// update table and create data
+// User.sync({alter: true}).then(() => {
+//     const user = User.build({username: "syafiq", password: "123", age: 25, WittCodeRocks: true});
+//     return user.save();
+// }).then((data) => {
+//     console.log('user add to database');
+// }).catch((err) => {
+//     console.log(err);
+// })
+
+//bulk create
+User.sync({alter: true}).then(()=>{
+    return User.bulkCreate([
+        {
+            username: 'a',
+            age: '23',
+            password: 123
+        },
+        {
+            username: 'aaaaa',
+            age: '23',
+            password: 123
+        }
+    ], { 
+        validate: true
+    });
+}).then((data)=>{
+    data.forEach((element)=>{
+        console.log(element.toJSON());
+    });
+}).catch((err)=>{
+    console.log(err);
+})
+
+//test validation
+// User.sync({alter: true}).then(()=>{
+//     return User.create(
+//         {
+//             username: 'a'
+//         }
+//     );
+// }).then((data)=>{
+//     data.forEach((element)=>{
+//         console.log(element.toJSON());
+//     });
+// }).catch((err)=>{
+//     console.log(err);
+// })
